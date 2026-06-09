@@ -5,6 +5,82 @@ script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 source "$script_dir/lib/util.sh"
 
 
+goldengate_upgrade_supported() {
+    if [[ $( macos_major ) -ge 27 ]]; then
+        echo "false"
+        return
+    fi
+    if is_virtual; then
+        echo "true"
+        return
+    fi
+
+    case $( hw_target ) in
+    J180dAP | \
+    J274AP | \
+    J293AP | \
+    J313AP | \
+    J314cAP | \
+    J314sAP | \
+    J316cAP | \
+    J316sAP | \
+    J375cAP | \
+    J375dAP | \
+    J413AP | \
+    J414cAP | \
+    J414sAP | \
+    J415AP | \
+    J416cAP | \
+    J416sAP | \
+    J433AP | \
+    J434AP | \
+    J456AP | \
+    J457AP | \
+    J473AP | \
+    J474sAP | \
+    J475cAP | \
+    J475dAP | \
+    J493AP | \
+    J504AP | \
+    J514cAP | \
+    J514mAP | \
+    J514sAP | \
+    J516cAP | \
+    J516mAP | \
+    J516sAP | \
+    J575cAP | \
+    J575dAP | \
+    J604AP | \
+    J613AP | \
+    J614cAP | \
+    J614sAP | \
+    J615AP | \
+    J616cAP | \
+    J616sAP | \
+    J623AP | \
+    J624AP | \
+    J700AP | \
+    J704AP | \
+    J713AP | \
+    J714cAP | \
+    J714sAP | \
+    J715AP | \
+    J716cAP | \
+    J716sAP | \
+    J773gAP | \
+    J773sAP | \
+    J813AP | \
+    J815AP | \
+    VMA2MACOSAP)
+        echo "true"
+        ;;
+    *)
+        echo "false"
+        ;;
+    esac
+}
+
+
 tahoe_upgrade_supported() {
     if [[ $( macos_major ) -ge 16 ]]; then
         echo "false"
