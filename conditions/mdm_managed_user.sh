@@ -5,15 +5,15 @@ script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 source "$script_dir/lib/util.sh"
 
 
-managed_uid=$( system_profiler SPConfigurationProfileDataType | grep "Managed User" | cut -d\( -f2 | cut -d\) -f1 )
-if [[ -z "$managed_uid" ]]; then
+managed_uuid=$( system_profiler SPConfigurationProfileDataType | grep " Managed User:" | cut -d: -f2 | cut -d" " -f2 )
+if [[ -z "$managed_uuid" ]]; then
 	set_fact mdm_managed_user string "NONE"
 	exit 0
 fi
 
-managed_username=$( id "$managed_uid" 2> /dev/null | cut -d\( -f2 | cut -d\) -f1 )
+managed_username=$( dscl . -search /Users GeneratedUID "$managed_uuid" | head -1 | cut -f1 )
 if [[ -z "$managed_username" ]]; then
-	set_fact mdm_managed_user string "$managed_uid"
+	set_fact mdm_managed_user string "$managed_uuid"
 	exit 0
 fi
 
